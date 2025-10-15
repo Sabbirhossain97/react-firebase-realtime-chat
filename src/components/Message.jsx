@@ -1,18 +1,12 @@
 import { UserRound, Send } from 'lucide-react'
-import { useState } from 'react';
-import { ref, push, set } from "firebase/database";
+import { useState,useEffect } from 'react';
+import { ref, push, set, onValue } from "firebase/database";
 import { db } from '../firebase/config';
 import useProfile from '../hooks/useProfile';
 
-const messages = [
-    { id: 1, text: "Hello bro how are you?" },
-    { id: 2, text: "I'm good! What about you?" },
-    { id: 3, text: "Doing great. Working on a new project." },
-    { id: 4, text: "That's awesome! Tell me more." },
-];
-
 function Message() {
     const [message, setMessage] = useState('');
+    const [messageList, setMessageList] = useState([]);
     const { user } = useProfile();
 
     const sendMessage = async () => {
@@ -31,10 +25,26 @@ function Message() {
         setMessage("")
     }
 
+    useEffect(() => {
+        const messagesRef = ref(db, 'messages');
+        const unsubscribe = onValue(messagesRef, (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                const msgs = Object.values(data).sort((a, b) => a.timestamp - b.timestamp);
+                setMessageList(msgs);
+
+            } else {
+                setMessageList([])
+            }
+        })
+
+        return () => unsubscribe()
+
+    }, [])
 
     return (
         <div className="w-3/4 flex flex-col mx-auto">
-            <div className="flex flex-row justify-between px-2 border-b border-zinc-800 py-4">
+            <div className="flex flex-row justify-between px-2 border-b border-gray-700 py-4">
                 <div className="flex items-center w-full sm:w-1/2">
                     <div>
                         <UserRound className='rounded-full p-2 border border-white/10 h-10 w-10 text-lg' />
@@ -53,11 +63,11 @@ function Message() {
             {/* chat area */}
             <div className="relative flex flex-col justify-between flex-1 space-y-4 mt-10 px-6">
                 <div className='max-h-[600px] space-y-4 overflow-x-hidden overflow-y-auto'>
-                    {messages.map((msg, index) => {
+                    {messageList.map((msg, index) => {
                         if (index % 2 === 0) {
                             return (
                                 <div
-                                    key={msg.id}
+                                    key={index}
                                     className={`flex w-full gap-2 ${index % 2 === 0 ? "justify-start" : "justify-end"
                                         }`}
                                 >
@@ -68,14 +78,14 @@ function Message() {
                                             : "bg-slate-700/80 text-right"
                                             }`}
                                     >
-                                        {msg.text}
+                                        {msg.message}
                                     </p>
                                 </div>
                             )
                         } else {
                             return (
                                 <div
-                                    key={msg.id}
+                                    key={index}
                                     className={`flex w-full gap-2 ${index % 2 === 0 ? "justify-start" : "justify-end"
                                         }`}
                                 >
@@ -85,7 +95,7 @@ function Message() {
                                             : "bg-slate-700/80 text-right"
                                             }`}
                                     >
-                                        {msg.text}
+                                        {msg.message}
                                     </p>
                                     <UserRound className='rounded-full p-2 border border-white/10 h-10 w-10 text-lg' />
                                 </div>

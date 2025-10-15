@@ -1,62 +1,44 @@
-import React from 'react'
-import { UserRound } from 'lucide-react'
+import { useEffect } from 'react';
+import useProfile from '../hooks/useProfile'
+import UsersList from './UsersList';
+import { LogOut } from 'lucide-react'
+import { auth } from '../firebase/config';
+import { ref, onDisconnect, set, serverTimestamp } from "firebase/database";
+import { signOut } from 'firebase/auth';
+import { db } from '../firebase/config';
 
 function Users() {
+    const { user } = useProfile();
+  
+    useEffect(() => {
+        if (!user) return;
+
+        const userStatusRef = ref(db, `users/${user.uid}`);
+
+        set(userStatusRef, {
+            email: user.email,
+            online: true,
+            lastSeen: serverTimestamp()
+        });
+
+        onDisconnect(userStatusRef).set({
+            email: user.email,
+            online: false,
+            lastSeen: serverTimestamp()
+        })
+
+    }, [user])
+
+
     return (
-        <div className="space-y-4 w-1/4 border-r border-zinc-800">
-            <h1 className='px-4 py-4 text-2xl font-bold'>Users(2)</h1>
-            <hr className='border-b border-zinc-800' />
-            <div className='max-h-[720px] space-y-4 overflow-y-auto'>
-                <div className="w-11/12 mx-auto px-6 py-4 bg-slate-800/80 transition duration-300 hover:opacity-75 cursor-pointer rounded-md shadow-users">
-                    <div className="flex justify-between">
-                        <div className="flex">
-                            <div className="relative">
-                                <UserRound />
-                            </div>
-                            <div className="ml-4">
-                                <p className="font-heebo text-[18px] font-bold leading-6">
-                                    Peter Johnson
-                                </p>
-                                <p className=" font-heebo text-[14px] not-italic font-medium leading-6 opacity-40">
-                                    Online
-                                </p>
-                            </div>
-                        </div>
-                        <p className="text-[16px] font-lato not-italic font-normal leading-5 opacity-50">
-                            3h ago
-                        </p>
-                    </div>
-                    <div className=" mt-4">
-                        <p className="font-heebo text-[14px] font-normal leading-5">
-                            Analysis of foreign experience, as it is commo…
-                        </p>
-                    </div>
-                </div>
-                <div className="w-11/12 mx-auto px-6 py-4 bg-slate-800/80 transition duration-300 hover:opacity-75 cursor-pointer rounded-md shadow-users">
-                    <div className="flex justify-between">
-                        <div className="flex">
-                            <div className="relative">
-                                <UserRound />
-                            </div>
-                            <div className="ml-4">
-                                <p className="font-heebo text-[18px] font-bold leading-6">
-                                    Peter Johnson
-                                </p>
-                                <p className=" font-heebo text-[14px] not-italic font-medium leading-6 opacity-40">
-                                    Online
-                                </p>
-                            </div>
-                        </div>
-                        <p className="text-[16px] font-lato not-italic font-normal leading-5 opacity-50">
-                            3h ago
-                        </p>
-                    </div>
-                    <div className=" mt-4">
-                        <p className="font-heebo text-[14px] font-normal leading-5">
-                            Analysis of foreign experience, as it is commo…
-                        </p>
-                    </div>
-                </div>
+        <div className="flex flex-col w-1/4 border-r border-gray-700 h-screen">
+            <UsersList currentUser={user} />
+            <div className="border-t space-y-2 border-gray-700 px-6 py-4 overflow-hidden">
+                <p className="text-md  font-semibold">{user?.email}</p>
+                <button onClick={() => signOut(auth)} className='text-md flex gap-2 items-center'>
+                    <LogOut className='h-4 w-4 text-gray-400' />
+                    <span className='text-gray-400'>Sign out</span>
+                </button>
             </div>
         </div>
     )

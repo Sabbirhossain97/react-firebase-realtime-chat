@@ -7,7 +7,11 @@ const useProfile = () => {
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
-            setUser(currentUser)
+            if(user){
+                setUser(currentUser)
+            } else {
+                setUser(null)
+            }
         });
 
         return () => unsubscribe()
