@@ -34,6 +34,7 @@ function Users() {
 
     }, [user])
 
+
     const handleSignOut = async () => {
         setSignOutLoading(true);
         try {
@@ -54,7 +55,7 @@ function Users() {
                 toast.success('Sign out successful!', {
                     position: 'top-center'
                 });
-            }, 1500);
+            }, 500);
         } catch (error) {
             console.error(error.message);
             toast.error(error.message, {
@@ -64,9 +65,11 @@ function Users() {
     };
 
     return (
-        <div className="flex flex-col w-1/4 border-r border-gray-700 h-screen">
-            <UsersList />
-            <div className="border-t space-y-2 border-gray-700 px-6 py-4 overflow-hidden">
+        <div className="flex flex-col w-1/4 border-r border-gray-700 h-screen justify-between">
+            <div className="flex-1 overflow-y-auto">
+                <UsersList />
+            </div>
+            <div className="border-t space-y-2 border-gray-700 px-6 py-4 ">
                 <p className="text-md  font-semibold">{user?.email}</p>
                 <button onClick={handleSignOut} className='text-md flex gap-2 items-center'>
                     {signOutLoading ? <span className="flex gap-2 items-center"><Spinner /> Processing</span> :

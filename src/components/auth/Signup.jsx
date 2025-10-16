@@ -9,6 +9,8 @@ function Signup() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState("");
+
     const navigate = useNavigate();
 
     const handleSignUp = async (e) => {
@@ -28,6 +30,8 @@ function Signup() {
             toast.error(error.message, {
                 position: 'top-center'
             })
+            setLoading(false)
+            setError(error.message);
         }
     };
 
@@ -44,8 +48,9 @@ function Signup() {
                     </div>
                     <div>
                         <label htmlFor="password" className="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
-                        <input type="password" value={password} name="password" id="password" onChange={e => setPassword(e.target.value)} placeholder="••••••••" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="" />
+                        <input type="password" value={password} name="password" id="password" onChange={e => setPassword(e.target.value)} placeholder="password" className="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5" required="" />
                     </div>
+                    {error && <p className="text-red-500 text-center">{error}</p>}
                     <button type="submit" className="w-full mt-4 flex justify-center text-center cursor-pointer text-white bg-gray-700 transition duration-300 hover:bg-gray-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5">
                         {loading ? <div className="flex gap-2 items-center"><Spinner /> Processing</div> : 'Register'}
                     </button>
