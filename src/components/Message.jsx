@@ -97,9 +97,9 @@ function Message({ setChatSideBar }) {
     }, [messageList]);
 
     return (
-        <div className="w-full lg:w-3/4 h-screen flex flex-col mx-auto">
-            <div className={`${selectedUser ? 'py-4': 'py-10'} flex flex-row justify-between px-2 lg:px-4 border-b border-gray-700`}>
-                <div className='flex flex-row gap-6 items-center'>
+        <div className="w-full lg:w-3/4 min-h-screen flex flex-col mx-auto">
+            <div className={`${selectedUser ? 'py-4' : 'py-10'} flex flex-row justify-between px-2 lg:px-4 border-b border-gray-700`}>
+                <div className='flex flex-row gap-3 lg:gap-6 items-center'>
                     <button className='lg:hidden' onClick={() => setChatSideBar(true)}>
                         <Menu className='ml-2 lg:ml-6' />
                     </button>
@@ -132,42 +132,54 @@ function Message({ setChatSideBar }) {
                         return (
                             <div
                                 key={msg.id}
-                                className={`flex w-full gap-2 ${isSentByCurrentUser ? "justify-end" : "justify-start"}`}
+                                className={`flex gap-2 ${isSentByCurrentUser ? "justify-end" : "justify-start"}`}
                             >
-                                <div>
-                                    {!isSentByCurrentUser && (
-                                        <UserRound className='rounded-full p-2 border border-white/10 h-10 w-10 text-lg' />
-                                    )}
-                                </div>
-                                <div className={`flex flex-col gap-1 ${isSentByCurrentUser ? "items-end" : "items-start"}`}>
-                                    <div className='flex gap-2 items-center'>
-                                        <p>
-                                            {msg.username}
-                                        </p>
-                                        <p className='text-sm text-gray-400'>
-                                            {messageTime(msg.timestamp)}
-                                        </p>
+                                {!isSentByCurrentUser && (
+                                    <UserRound className="rounded-full p-2 border border-white/10 h-10 w-10 text-lg" />
+                                )}
+
+                                <div
+                                    className={`flex flex-col gap-1 ${isSentByCurrentUser ? "items-end" : "items-start"
+                                        }`}
+                                    style={{ maxWidth: "75%" }}
+                                >
+                                    <div className="flex gap-2 items-center">
+                                        <p>{msg.username}</p>
+                                        <p className="text-sm text-gray-400">{messageTime(msg.timestamp)}</p>
                                     </div>
-                                    <div className={`flex items-end justify-end gap-2`}>
+
+                                    <div className="flex items-end gap-2">
                                         <p
-                                            className={`py-2 px-2 rounded-lg ${isSentByCurrentUser
-                                                ? "bg-slate-700 text-white order-2"
-                                                : "bg-slate-800 text-white order-1"
+                                            className={`py-2 px-3 rounded-lg break-words whitespace-pre-wrap text-white ${isSentByCurrentUser
+                                                ? "bg-slate-700 order-2"
+                                                : "bg-slate-800 order-1"
                                                 }`}
+                                            style={{
+                                                wordBreak: "break-word",
+                                                maxWidth: "100%",
+                                                overflowWrap: "anywhere",
+                                            }}
                                         >
                                             {msg.message}
                                         </p>
-                                        <p className={`order-1 ${isSentByCurrentUser ? 'order-1' : 'order-2'}`} title={`${isSeenByReceiver ? 'Read' : 'Delivered'}`}>
-                                            <CheckCheck className={`${isSeenByReceiver ? 'text-green-500' : " "} h-4 w-4`} />
+
+                                        <p
+                                            className={`order-1 ${isSentByCurrentUser ? "order-1" : "order-2"}`}
+                                            title={`${isSeenByReceiver ? "Read" : "Delivered"}`}
+                                        >
+                                            <CheckCheck
+                                                className={`${isSeenByReceiver ? "text-green-500" : ""} h-4 w-4`}
+                                            />
                                         </p>
                                     </div>
                                 </div>
-                                <div>
-                                    {isSentByCurrentUser && (
-                                        <UserRound className='rounded-full p-2 border border-white/10 h-10 w-10 text-lg' />
-                                    )}
-                                </div>
+
+                                {/* Right avatar for sender */}
+                                {isSentByCurrentUser && (
+                                    <UserRound className="rounded-full p-2 border border-white/10 h-10 w-10 text-lg" />
+                                )}
                             </div>
+
                         );
                     })}
                     <div ref={messagesEndRef} />
