@@ -17,7 +17,6 @@ function UsersList() {
 
     useEffect(() => {
         if (!userList) return;
-
         switch (msgFilter) {
             case 'all':
                 setFilteredUsers(userList);
@@ -84,11 +83,11 @@ function UsersList() {
                         );
                     }
                 });
-                setLoadingUsers(false)
 
                 return { ...u, hasNew: false };
             });
 
+            setLoadingUsers(false)
             setUserList(usersWithNew);
         });
 
