@@ -2,6 +2,7 @@ import Users from '../components/Users'
 import Message from '../components/Message'
 
 function Chat() {
+
   return (
     <div className='pb-10 bg-slate-900 max-h-screen overflow-hidden'>
       <div className='h-auto scale-95'>
