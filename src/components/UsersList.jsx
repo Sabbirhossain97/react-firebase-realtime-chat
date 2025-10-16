@@ -5,6 +5,7 @@ import { UserRound } from 'lucide-react'
 import { useAuth } from "../context/AuthContext";
 import { useChat } from "../context/ChatContext";
 import EmptyUsersData from "./EmptyUsersData";
+import Spinner from "./Spinner";
 
 function UsersList() {
     const [userList, setUserList] = useState([]);
@@ -12,6 +13,7 @@ function UsersList() {
     const { user: currentUser } = useAuth();
     const { selectUser } = useChat();
     const [msgFilter, setMsgFilter] = useState('all');
+    // const [loadingUsers,setLoadingUsers] = useState(false)
 
     useEffect(() => {
         if (!userList) return;
@@ -36,6 +38,7 @@ function UsersList() {
 
         const usersRef = ref(db, "users");
 
+        // setLoadingUsers(true);
         const unsubscribe = onValue(usersRef, (snapshot) => {
             const data = snapshot.val();
             if (!data) {
@@ -81,6 +84,7 @@ function UsersList() {
                         );
                     }
                 });
+                // setLoadingUsers(false)
 
                 return { ...u, hasNew: false };
             });
@@ -93,8 +97,8 @@ function UsersList() {
 
     return (
         <div >
-            <div className="px-4 py-4 border-b border-gray-700">
-                <h1 className="text-2xl font-bold">Users ({userList?.length})</h1>
+            <div className="px-4 py-6 border-b border-gray-700">
+                <h1 className="text-2xl font-bold">Chat</h1>
             </div>
             {userList.length > 0 && <div className="px-4 pt-4">
                 <ul className="flex gap-2">
@@ -104,32 +108,36 @@ function UsersList() {
                 </ul>
             </div>}
             <div className="flex-1 overflow-y-auto space-y-4 p-4">
-                {currentUser && filteredUsers.length > 0 ? filteredUsers.map((u) => (
-                    <div
-                        key={u.uid}
-                        className="w-full relative px-2 py-5 bg-slate-800/80 hover:bg-slate-700/50 cursor-pointer rounded-md transition duration-300"
-                        onClick={() => selectUser(u, currentUser.uid)}
-                    >
-                        <div className="text-sm absolute bg-blue-500 right-0 -top-1 rounded-lg px-2">
-                            {u.hasNew ? "new" : ""}
-                        </div>
-                        <div className="flex mt-1 justify-between px-2">
-                            <div className="flex items-center gap-3 overflow-hidden">
-                                <div>
-                                    <UserRound className='rounded-full p-2 border border-white/10 h-10 w-10 text-lg' />
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-[16px] font-semibold truncate">{u.email}</p>
-                                    <div className="flex justify-between">
-                                        <p className={`text-sm ${u.online ? "text-green-400" : "text-gray-400"}`}>
-                                            {u.online ? "Online" : "Offline"}
-                                        </p>
+                {filteredUsers.length > 0 ? (
+                    filteredUsers.map((u) => (
+                        <div
+                            key={u.uid}
+                            className="w-full relative px-2 py-5 bg-slate-800/80 hover:bg-slate-700/50 cursor-pointer rounded-md transition duration-300"
+                            onClick={() => selectUser(u, currentUser.uid)}
+                        >
+                            <div className="text-sm absolute bg-blue-500 right-0 -top-1 rounded-lg px-2">
+                                {u.hasNew ? "new" : ""}
+                            </div>
+                            <div className="flex mt-1 justify-between px-2">
+                                <div className="flex items-center gap-3 overflow-hidden">
+                                    <div>
+                                        <UserRound className='rounded-full p-2 border border-white/10 h-10 w-10 text-lg' />
+                                    </div>
+                                    <div className="flex-1 min-w-0">
+                                        <p className="text-[16px] font-semibold truncate">{u.email}</p>
+                                        <div className="flex justify-between">
+                                            <p className={`text-sm ${u.online ? "text-green-400" : "text-gray-400"}`}>
+                                                {u.online ? "Online" : "Offline"}
+                                            </p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                )) : <EmptyUsersData />}
+                    ))
+                ) : (
+                    <EmptyUsersData />
+                )}
             </div>
         </div>
     )

@@ -1,14 +1,15 @@
+import { useState } from 'react'
 import Users from '../components/Users'
 import Message from '../components/Message'
 
 function Chat() {
-
+  const [chatSideBar, setChatSideBar] = useState(false)
   return (
-    <div className='pb-10 bg-slate-900 max-h-screen overflow-hidden'>
-      <div className='h-auto scale-95'>
-        <div className='flex mx-auto h-full max-w-7xl text-white border border-gray-700 rounded-xl bg-slate-800/50'>
-          <Users />
-          <Message />
+    <div className='bg-slate-900 max-h-sceen overflow-hidden'>
+      <div className='lg:scale-95'>
+        <div className='flex mx-auto max-w-7xl relative text-white border border-gray-700 lg:rounded-xl bg-slate-800/50'>
+          <Users chatSideBar={chatSideBar} setChatSideBar={setChatSideBar} />
+          <Message setChatSideBar={setChatSideBar} />
         </div>
       </div>
     </div>
