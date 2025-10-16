@@ -1,16 +1,53 @@
-# React + Vite
+# 💬 React Firebase Realtime Chat App
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern real-time chat application built with **React**, **Firebase Realtime Database**, and **TailwindCSS** — featuring online status tracking, typing indicators, message read receipts, and responsive UI.
 
-Currently, two official plugins are available:
+🚀 **Live Demo:** https://react-firebase-realtime-chat.vercel.app/
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+---
 
-## React Compiler
+## 🧠 Features
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+✅ **Authentication**
+- Email/password sign-in using Firebase Authentication  
+- Secure user sessions with private routing
 
-## Expanding the ESLint configuration
+✅ **Real-Time Messaging**
+- Instant message updates using Firebase Realtime Database  
+- Message read and unread filter and live read/unread marking
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+✅ **User Presence**
+- Online/offline status tracking in real time
+
+✅ **UI & UX**
+- Responsive layout with sidebar and chat area  
+- Smooth transitions and hover effects  
+- Scroll-to-latest-message on send  
+- “No users found” / empty state UI  
+- Sidebar animation on mobile (slide-in/out)
+
+---
+
+## ⚙️ Tech Stack
+
+| Category | Technology |
+|-----------|-------------|
+| Frontend | React (Vite) |
+| Styling | Tailwind CSS |
+| State Management | React Hooks |
+| Backend | Firebase Realtime Database |
+| Auth | Firebase Authentication |
+| Deployment | Vercel |
+
+---
+
+## 🛠️ Setup & Installation
+
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/Sabbirhossain97/react-firebase-realtime-chat-.git
+   cd react-firebase-realtime-chat-
+   npm install
+   npm run dev
+
+
